@@ -47,8 +47,8 @@ var app = {
       /*
             Regenalarm
         */
-        var showNotification = function (title, message) {
-          $('#error-display').html('<h1>'+title+'</h1><p>'+message+'</p>');
+        var showNotification = function (message) {
+          $('#error-display').html('<p>'+message+'</p>');
           $('#error-display').show();
         };
 
@@ -78,7 +78,6 @@ var app = {
 
           xhr.onerror = function (err) {
             showNotification(
-              navigator.mozL10n.get("error-fetching-address-title"),
               navigator.mozL10n.get("error-fetching-address-message")
             );
           };
@@ -106,7 +105,6 @@ var app = {
 
           xhr.onerror = function (err) {
             showNotification(
-            	navigator.mozL10n.get("error-fetching-rain-title"),
                 navigator.mozL10n.get("error-fetching-rain-message")
             );
           };
@@ -247,9 +245,20 @@ var app = {
           });
         };
 
+        var defaultGeo = {
+            coords: {
+                latitude: 52.1100,
+                longitude: 5.1806
+            },
+            description: 'De Bilt'
+        };
+
+        getLiveData(defaultGeo.coords.latitude, defaultGeo.coords.longitude, function(data) {
+          draw(data, defaultGeo.description);
+        });
+
         var timeoutLocation = function timeoutLocation() {
           showNotification(
-            navigator.mozL10n.get("timeout-location-title"),
             navigator.mozL10n.get("timeout-location-message")
           );
         };
@@ -267,7 +276,6 @@ var app = {
         },
         function () {
           showNotification(
-            navigator.mozL10n.get("error-location-title"),
             navigator.mozL10n.get("error-location-message")
           );
         });

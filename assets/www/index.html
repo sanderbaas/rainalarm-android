@@ -21,10 +21,19 @@
     <div id="wrapper">
       <section role="region">
         <header>
+          <menu type="toolbar" class="left">
+            <button class="show-menu" id="menu"><span class="icon icon-menu">menu</span></button>
+          </menu>
           <h1 data-l10n-id="app-heading">Regenalarm</h1>
         </header>
       </section>
       <div id="error-display"></div>
+      <div id="sidemenu">
+        <ul id="locs">
+          <li><h2 data-l10n-id="add-location-title">Add location</h2><input name="newLocation" id="new-location" type="text"> <button class="add-location" id="add-location">OK</button></li>
+          <li><button class="current-location" id="current-location" data-l10n-id="current-location-button">Current location</button></li>
+        </ul>
+      </div>
         <div id="graph">
         </div>
       <footer>

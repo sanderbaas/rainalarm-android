@@ -80,6 +80,10 @@ section[role="region"] > header:first-child menu[type="toolbar"] {
   float: right;
 }
 
+section[role="region"] > header:first-child menu[type="toolbar"].left {
+  float: left;
+}
+
 section[role="region"] > header:first-child menu[type="toolbar"] a,
 section[role="region"] > header:first-child menu[type="toolbar"] button {
   -moz-box-sizing: border-box;
@@ -421,4 +425,3 @@ html[dir="rtl"] .skin-organic section[role="region"] > header:first-child .icon.
 html[dir="rtl"] section[role="region"].skin-dark > header:first-child .icon.icon-back {
   background-image: url(../images/headers/icons/organic/back_rtl.png);
 }
-

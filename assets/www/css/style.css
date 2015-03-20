@@ -11,3 +11,53 @@ body {min-height:100%; padding:0; margin:0;}
 }
 header { margin-top: -5rem; height:5rem;}
 footer { margin-top: -4rem; height:4rem;}
+
+#menu {
+  margin-left:-2rem;
+}
+
+#sidemenu {
+  display: block;
+  position: absolute;
+  left:0;
+  top:0;
+  min-height:100%;
+  background-color:#3C4648;
+  width:0rem;
+  overflow:hidden;
+  color: white;
+  padding-top: 5rem;
+  font-size: 1.25rem;
+  line-height:2rem;
+  box-sizing: border-box;
+  z-index: 1;
+}
+
+#sidemenu ul {
+  
+}
+
+#sidemenu ul li {
+  display:block;
+  padding:1.5rem;
+  float:left;
+  width:100%;
+  border-bottom: 0.1rem solid #596068;
+}
+
+button.add-location {
+  width:5rem;
+  margin-top:1rem;
+}
+
+button.show-loc, button.remove-loc, button.current-location {
+  width:auto;
+}
+
+input#new-location {
+  height: 3.8rem;
+  margin: 0;
+  padding: 0px 1.5rem;
+  box-sizing: border-box;
+  display: inline-block;
+}

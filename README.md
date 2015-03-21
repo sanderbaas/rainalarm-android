@@ -1,6 +1,8 @@
 # Rain Alarm
 
-Rain Alarm is an app for Android with which precipitation forecasts are visualized in a graph. For now only locations in The Netherlands are covered via open-data of Buienradar. Forecasts of the next two hours are displayed in five-minute intervals. The forecasts are based on your current location, so it is important that the app has access to your location.
+Rain Alarm is an app for Android with which precipitation forecasts are visualized in a graph. For now only locations in The Netherlands are covered via open-data of Buienradar. Forecasts of the next two hours are displayed in five-minute intervals.
+
+It is possible to search a certain location by address, through Nominatim and save it. You can save multiple locations and switch between them. You can also use your current location.
 
 This app has been generated from an HTML5-app with PhoneGap.
 
@@ -8,14 +10,12 @@ This app has been generated from an HTML5-app with PhoneGap.
 
 For now the GPS-coordinates of your location are sent to https://nominatim.openstreetmap.org to figure out what the description is for your location. This is shown in the app. Furthermore your GPS-coordinates are sent to http://gps.buienradar.nl/getrr.php to fetch the precipitation forecast for your location.
 
-I am planning to add a few features to the app very shortly. One is that you can add a location + description yourself. That way it is not neccesary to share your exact location and to fetch a description through OpenStreetmap. Also it will be possible to add multiple locations.
-
 I am also thinking about adding an option to 'blur' your location by a certain distance. This has also been implemented in the latest nightly of Firefox OS itself, so for that it is not immediately neccesary.
 
 Third feature I am thinking of is a way of using a (anonymizing) proxy for fetching forecasts from Buienradar, to prevent sharing your location along with your IP-address with them.
 
 ### Version
-1.0.0
+2.0.0
 
 ### Tech
 

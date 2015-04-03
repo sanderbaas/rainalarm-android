@@ -1,5 +1,7 @@
 var locations = [];
 var geoLocation;
+var autoRefreshInterval = 60000;
+var autoRefreshId;
 
 // Application Constructor
 function initialize () {
@@ -112,6 +114,7 @@ function initialize () {
     });
 
     run();
+    initAutoRefresh();
   });
 }
 
@@ -235,7 +238,6 @@ function parseAddress(data) {
   if (data && data.address) {
     // all parts until suburb or else city
     Object.keys(data.address).some(function(key){
-      console.log(key);
       if (key === 'house_number') {
         houseNumber = data.address[key];
       } else {
@@ -453,9 +455,30 @@ function run (loc){
   });
 }
 
+function initAutoRefresh() {
+  autoRefreshId = setInterval(function(){ run(); }, autoRefreshInterval);
+}
+
+function clearAutoRefresh() {
+  clearInterval(autoRefreshId);
+}
+
+function resume() {
+  run();
+  initAutoRefresh();
+}
+
+function pause() {
+  clearAutoRefresh();
+}
+
+
+
 if (document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) {
   // PhoneGap application
   document.addEventListener('deviceready', initialize, false);
+  document.addEventListener('resume', resume, false);
+  document.addEventListener('pause', pause, false);
 } else {
   // Web page
   document.onload = initialize();

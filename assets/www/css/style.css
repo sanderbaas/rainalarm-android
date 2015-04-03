@@ -33,10 +33,6 @@ footer { margin-top: -4rem; height:4rem;}
   z-index: 1;
 }
 
-#sidemenu ul {
-  
-}
-
 #sidemenu ul li {
   display:block;
   padding:1.5rem;
@@ -57,6 +53,7 @@ button.show-loc, button.remove-loc, button.current-location {
 input#new-location {
   height: 3.8rem;
   margin: 0;
+  font-size:1.25rem;
   padding: 0px 1.5rem;
   box-sizing: border-box;
   display: inline-block;

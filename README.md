@@ -10,12 +10,14 @@ This app has been generated from an HTML5-app with PhoneGap.
 
 For now the GPS-coordinates of your location are sent to https://nominatim.openstreetmap.org to figure out what the description is for your location. This is shown in the app. Furthermore your GPS-coordinates are sent to http://gps.buienradar.nl/getrr.php to fetch the precipitation forecast for your location.
 
+To be able to show the current weather conditions on your location, the GPS-coordinates are also sent to OpenWeatherMap.
+
 I am also thinking about adding an option to 'blur' your location by a certain distance. This has also been implemented in the latest nightly of Firefox OS itself, so for that it is not immediately neccesary.
 
 Third feature I am thinking of is a way of using a (anonymizing) proxy for fetching forecasts from Buienradar, to prevent sharing your location along with your IP-address with them.
 
 ### Version
-2.0.0
+2.2.0
 
 ### Tech
 
@@ -25,6 +27,7 @@ RainAlarm uses a number of open source projects to work properly:
 * [HighCharts] - a charting library written in pure JavaScript
 * [Nominatim] - a tool from OpenStreetmap for reverse geocoding
 * [jQuery] - a fast, small, and feature-rich JavaScript library
+* [OpenStreetMap] - a collaborative project to create a free editable map of the world
 
 License
 ----
@@ -44,3 +47,4 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 [jQuery]:http://jquery.com
 [Firefox Marketplace]:https://marketplace.firefox.com/
 [f-droid]:https://f-droid.org/
+[OpenStreetMap]:https://www.openstreetmap.org/

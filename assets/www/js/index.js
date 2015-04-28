@@ -140,10 +140,10 @@ function alerter(message, alertCallback, title, buttonName) {
 }
 
 function toggleSideMenu() {
-  var gotoWidth = "+=30rem";
-  if ($('#sidemenu').width() > 0) { gotoWidth = "0rem"; }
+  var gotoLeft = "0rem";
+  if (parseInt($('#sidemenu').css('left')) == 0) { gotoLeft = "-30rem"; }
   $('#sidemenu').animate({
-    width: gotoWidth
+    left: gotoLeft
   }, 500, function() { });
 }
 
@@ -276,9 +276,33 @@ function getAddress (lat, lon, cb) {
   xhr.send();
 }
 
+function getCurrentWeather (lat, lon, cb){
+  var url = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon;
+  var xhr = new XMLHttpRequest({mozSystem: true});
+  xhr.timeout = 3000;
+  xhr.open('GET', url, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.status === 200 && xhr.readyState === 4) {
+      var data = JSON.parse(xhr.response);
+      cb(null, data);
+      return;
+    }
+  };
+
+  xhr.onerror = function (err) {
+    cb(err);
+  };
+
+  xhr.ontimeout = function (err) {
+    cb('timout');
+  };
+  xhr.send();
+}
+
 function getLiveData (lat, lon, cb) {
   var url = 'http://gps.buienradar.nl/getrr.php?lat='+lat+'&lon='+lon;
   var xhr = new XMLHttpRequest({mozSystem: true});
+  xhr.timeout = 3000;
   xhr.open('GET', url, true);
   xhr.onreadystatechange = function () {
     if (xhr.status === 200 && xhr.readyState === 4) {
@@ -297,6 +321,10 @@ function getLiveData (lat, lon, cb) {
 
   xhr.onerror = function (err) {
     cb(navigator.mozL10n.get("error-fetching-rain-message"));
+  };
+
+  xhr.ontimeout = function (err) {
+    cb('timout');
   };
   xhr.send();
 }
@@ -332,7 +360,7 @@ function getTestData(cb) {
   cb(null, sets);
 }
 
-function draw(data, description) {
+function draw(data, description, weatherData) {
   $('#error-display').hide();
 
   var chart = new Highcharts.Chart({
@@ -350,13 +378,17 @@ function draw(data, description) {
       text: description,
       align: 'left',
       style: {
-        'font-weight': 'bold'
+        'font-weight': 'bold',
+        backgroundColor:'#ccc'
       }
     },
     subtitle: {
-      text: '',
+      text: weatherData,
+      align: 'left',
+      useHTML: true,
       style: {
-        display: 'none'
+        fontSize: '150%',
+        color: '#333'
       }
     },
     xAxis: {
@@ -431,8 +463,184 @@ function draw(data, description) {
       name: description,
       data: data,
       color: '#B2F2FF'
-    }]
+    }],
+    noData: {
+    style: {
+      fontWeight: 'bold',
+      fontSize: '15px',
+      color: '#333'
+      }
+    }
   });
+
+  chart.hideNoData();
+
+  if (data.every(function(element, index, array) {
+    return Math.round(10*element[1]) == 0;
+  })) {
+    chart.showNoData(navigator.mozL10n.get("no-rain"));
+  }
+}
+
+function windMsToBft(windMs) {
+  if (windMs >= 0 && windMs < 0.3) {
+    return 0;
+  }
+  if (windMs >= 0.3 && windMs < 1.6) {
+    return 1;
+  }
+  if (windMs >= 1.6 && windMs < 3.4) {
+    return 2;
+  }
+  if (windMs >= 3.4 && windMs < 5.5) {
+    return 3;
+  }
+  if (windMs >= 5.5 && windMs < 8) {
+    return 4;
+  }
+  if (windMs >= 8 && windMs < 10.8) {
+    return 5;
+  }
+  if (windMs >= 10.8 && windMs < 13.9) {
+    return 6;
+  }
+  if (windMs >= 13.9 && windMs < 17.2) {
+    return 7;
+  }
+  if (windMs >= 17.2 && windMs < 20.8) {
+    return 8;
+  }
+  if (windMs >= 20.8 && windMs < 24.5) {
+    return 9;
+  }
+  if (windMs >= 24.5 && windMs < 28.5) {
+    return 10;
+  }
+  if (windMs >= 28.5 && windMs < 32.7) {
+    return 11;
+  }
+  if (windMs >= 32.7) {
+    return 12;
+  }
+}
+
+function windDegTo15Deg(deg, correction) {
+  if (correction) { deg += correction; }
+  if (deg < 0) { deg += 360; }
+  if (deg >= 360) { deg -= 360; }
+  return Math.round(deg/15) * 15;
+}
+
+function tempKtoC(tempK) {
+  return Math.round(tempK - 273.15);
+}
+
+function convertIcon(icon) {
+  switch (icon) {
+    case '01d':
+      return 'wi-day-sunny';
+    case '02d':
+      return 'wi-day-sunny-overcast';
+    case '03d':
+      return 'wi-cloudy';
+    case '04d':
+      return 'wi-cloudy';
+    case '09d':
+      return 'wi-showers';
+    case '10d':
+      return 'wi-day-showers';
+    case '11d':
+      return 'wi-storm-showers';
+    case '13d':
+      return 'wi-snow';
+    case '50d':
+      return 'wi-fog';
+    case '01n':
+      return 'wi-night-clear';
+    case '02n':
+      return 'wi-night-cloudy';
+    case '03n':
+      return 'wi-cloudy';
+    case '04n':
+      return 'wi-cloudy';
+    case '09n':
+      return 'wi-showers';
+    case '10n':
+      return 'wi-night-showers';
+    case '11n':
+      return 'wi-storm-showers';
+    case '13n':
+      return 'wi-snow';
+    case '50n':
+      return 'wi-fog';
+    }
+}
+
+function renderWeather(data) {
+  var darkness = false;
+  var temp = 0;
+  var windBft = 0;
+  var windDeg = 0;
+
+  if (data.dt && data.sys && data.sys.sunrise && data.sys.sunset) {
+    if (data.dt < data.sys.sunrise || data.dt > data.sys.sunset) {
+      darkness = true;
+    }
+  }
+
+  if (data.wind && data.wind.speed && data.wind.deg) {
+    var windBft = windMsToBft(data.wind.speed);
+    var windDeg = windDegTo15Deg(data.wind.deg, 135);
+
+    $('#windBft').html(windBft);
+    $('#windDeg').prop('class', 'fa fa-location-arrow _'+windDeg+'-deg');
+  }
+
+  if (data.main && data.main.temp) {
+    var temp = tempKtoC(data.main.temp);
+    $('#temp').html(temp);
+  }
+
+  if (data.weather && data.weather[0] && data.weather[0].icon) {
+    var wiIcon = convertIcon(data.weather[0].icon);
+    $('#weatherIcon').prop('class', 'wi ' + wiIcon);
+  }
+}
+
+function generateWeatherHTML(data) {
+  var darkness = false;
+  var temp = 0;
+  var windBft = 0;
+  var windClasses = '';
+  var iconClasses = '';
+
+  if (data.dt && data.sys && data.sys.sunrise && data.sys.sunset) {
+    if (data.dt < data.sys.sunrise || data.dt > data.sys.sunset) {
+      darkness = true;
+    }
+  }
+
+  if (data.wind && data.wind.speed && data.wind.deg) {
+    var windBft = windMsToBft(data.wind.speed);
+    var windDeg = windDegTo15Deg(data.wind.deg, 135);
+    windClasses = 'fa fa-location-arrow _'+windDeg+'-deg';
+  }
+
+  if (data.main && data.main.temp) {
+    var temp = tempKtoC(data.main.temp);
+  }
+
+  if (data.weather && data.weather[0] && data.weather[0].icon) {
+    var wiIcon = convertIcon(data.weather[0].icon);
+    iconClasses = 'wi ' + wiIcon;
+  }
+
+  var html = '<span class="infoIcon"><i id="weatherIcon" class="' + iconClasses + '"></i></span> ' +
+             '<span class="infoText"><span id="temp">' + temp + '</span>&deg;C</span> &nbsp; ' +
+             '<span class="infoIcon"><i id="windDeg" class="' + windClasses + '"></i></span> ' +
+             '<span class="infoText"><span id="windBft">' + windBft + '</span> Bft</span>';
+
+  return html;
 }
 
 function showNotification(message) {
@@ -444,14 +652,22 @@ function run (loc){
   toggleWaiter(true);
   var location = loc || getDefaultLoc();
 
-  getLiveData(location.lat, location.lon, function(err, data) {
+  getLiveData(location.lat, location.lon, function(err, rainData) {
     if (err) {
       showNotification(err);
       toggleWaiter(false);
       return;
     }
-    draw(data, location.desc);
-    toggleWaiter(false);
+
+    getCurrentWeather(location.lat, location.lon, function(err, weatherData) {
+      var weatherHTML = '';
+      if (!err) {
+        weatherHTML = generateWeatherHTML(weatherData);
+      }
+
+      draw(rainData, location.desc, weatherHTML);
+      toggleWaiter(false);
+    });
   });
 }
 

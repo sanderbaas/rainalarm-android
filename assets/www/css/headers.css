@@ -159,7 +159,8 @@ section[role="region"] > header:first-child .icon {
   width: 3rem;
   height: 5rem;
   margin: 0 -1rem;
-  background: transparent no-repeat center center / 3rem auto;
+  background-repeat: no-repeat;
+  background-position: center center;
   font-size: 0;
   overflow: hidden;
 }

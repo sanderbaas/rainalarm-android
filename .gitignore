@@ -4,8 +4,5 @@ gen
 local.properties
 ant-build
 ant-gen
-CordovaLib/ant-build
-CordovaLib/ant-gen
-CordovaLib/bin
-CordovaLib/gen
-CordovaLib/local.properties
+CordovaLib
+cordova

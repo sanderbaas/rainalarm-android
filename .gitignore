@@ -14,3 +14,6 @@ out
 /build
 CordovaLib/bin
 bin
+libs
+.project
+.classpath

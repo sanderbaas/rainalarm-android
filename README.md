@@ -17,7 +17,7 @@ I am also thinking about adding an option to 'blur' your location by a certain d
 Third feature I am thinking of is a way of using a (anonymizing) proxy for fetching forecasts from Buienradar, to prevent sharing your location along with your IP-address with them.
 
 ### Version
-2.2.0
+2.2.2
 
 ### Tech
 
@@ -28,6 +28,18 @@ RainAlarm uses a number of open source projects to work properly:
 * [Nominatim] - a tool from OpenStreetmap for reverse geocoding
 * [jQuery] - a fast, small, and feature-rich JavaScript library
 * [OpenStreetMap] - a collaborative project to create a free editable map of the world
+
+I compile the source code with Eclipse by using cordova-3.7.2.jar in a 'libs' directory in the root of this project.
+You can obtain this here: https://www.apache.org/dist/cordova/platforms/
+To build the .jar file, download a .tgz file, unpack it and then:
+```
+android update project -p .
+```
+and
+```
+ant
+```
+After this, right click the jar file in Eclipse and add it to the build path.
 
 License
 ----

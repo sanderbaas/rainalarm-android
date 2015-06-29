@@ -9,12 +9,12 @@ function initialize () {
     // fetch localStorage
     locations = JSON.parse(window.localStorage.getItem('locations')) || [];
 
-    $(document).on('click','button.remove-loc', function(){
+    $(document).on('click','span.remove-loc', function(){
       removeLoc($(this).data('id'));
       $(this).closest('li').remove();
     });
 
-    $(document).on('click','button.show-loc', function(){
+    $(document).on('click','span.show-loc', function(){
       var lat = $(this).data('lat');
       var lon = $(this).data('lon');
       var desc = $(this).data('desc');
@@ -70,7 +70,7 @@ function initialize () {
           alerter(navigator.mozL10n.get("timeout-location-message"));
         };
 
-        var timeoutGeo = window.setTimeout(timeoutLocation, 10000);
+        var timeoutGeo = window.setTimeout(timeoutLocation, 60000);
 
         navigator.geolocation.getCurrentPosition(function (position) {
           window.clearTimeout(timeoutGeo);
@@ -193,7 +193,7 @@ function getDefaultLoc() {
 }
 
 function addLocElement(loc) {
-  var locLi = $('#locs').append('<li class="loc"><h2>'+loc.desc+'</h2><button class="show-loc" data-id="'+loc.id+'" data-lat="'+loc.lat+'" data-lon="'+loc.lon+'" data-desc="'+loc.desc+'">'+navigator.mozL10n.get("button-show")+'</button> <button class="remove-loc" data-id="'+loc.id+'">'+navigator.mozL10n.get("button-remove")+'</button></li>');
+  var locLi = $('#locs').append('<li class="loc"><span class="show-loc" data-id="'+loc.id+'" data-lat="'+loc.lat+'" data-lon="'+loc.lon+'" data-desc="'+loc.desc+'">'+loc.desc+'</span> <span class="remove-loc" data-id="'+loc.id+'">\uf014</span></li>');
 }
 
 function getCoords(query, cb) {
@@ -329,156 +329,125 @@ function getLiveData (lat, lon, cb) {
   xhr.send();
 }
 
-function getTestData(cb) {
-  var sets = [
-    ['12:00',0],
-    ['12:05',1],
-    ['12:10',1.1],
-    ['12:15',1.2],
-    ['12:20',1.4],
-    ['12:25',1.5],
-    ['12:30',1.4],
-    ['12:35',1],
-    ['12:40',0.4],
-    ['12:45',0],
-    ['12:50',1],
-    ['12:55',1.5],
-    ['13:00',2],
-    ['13:05',2.5],
-    ['13:10',3.5],
-    ['13:15',4],
-    ['13:20',4],
-    ['13:25',3.5],
-    ['13:30',2],
-    ['13:35',1],
-    ['13:40',0],
-    ['13:45',0],
-    ['13:50',0],
-    ['13:55',0],
-    ['14:00',0],
-  ];
+function getTestData(lat, lon, cb) {
+  var dt = new Date();
+  dt.setMinutes(Math.floor(dt.getMinutes()/5)*5);
+
+  var sets = [];
+  for (i=0; i<25; i++) {
+    sets.push([dt.getHours() + ':' + (dt.getMinutes()<10 ? '0' : '') + dt.getMinutes(), Math.random()*(5*Math.random())]);
+    dt.setMilliseconds(dt.getMilliseconds() + 5*60*1000);
+  }
+
   cb(null, sets);
 }
 
-function draw(data, description, weatherData) {
+function draw(data, description, weather) {
   $('#error-display').hide();
 
-  var chart = new Highcharts.Chart({
-    chart: {
-      renderTo: 'graph',
-      type: 'area'
+  var x = [];
+  var precipitation = [];
+  data.forEach(function(pair){
+    var dt = new Date();
+    x.push(pair[0]);
+    precipitation.push(pair[1]);
+  });
+
+  var chart = c3.generate({
+    bindto: '#graph',
+    padding: {
+      top: 60,
+      left: 10,
+      right: 10
     },
-    credits: {
-      enabled: false
+    data: {
+        columns: [
+            ['precipitation'].concat(precipitation)
+        ],
+        types: {
+            precipitation: 'area-spline'
+        }
     },
     legend: {
-      enabled: false
+      show: false
     },
-    title: {
-      text: description,
-      align: 'left',
-      style: {
-        'font-weight': 'bold',
-        backgroundColor:'#ccc'
+    color: {
+      pattern: ['#47E0FF']
+    },
+    axis: {
+        x: {
+          type: 'categories',
+          categories: x,
+          tick: {
+            count: 5,
+            fit: true
+          }
+        },
+        y: {
+          padding: { top: 0 },
+          show: false,
+          max: Math.max(4, Math.max.apply(Math, precipitation))
+        }
+    },
+    grid: {
+      y: {
+        lines: [
+          {value: 0.3, position: 'start', class: 'line-light-rain', text: navigator.mozL10n.get("light-rain")},
+          {value: 1.3, position: 'start', class: 'line-medium-rain', text: navigator.mozL10n.get("medium-rain")},
+          {value: 2.5, position: 'start', class: 'line-heavy-rain', text: navigator.mozL10n.get("heavy-rain")}
+        ]
       }
     },
-    subtitle: {
-      text: weatherData,
-      align: 'left',
-      useHTML: true,
-      style: {
-        fontSize: '150%',
-        color: '#333'
-      }
-    },
-    xAxis: {
-      type: 'category',
-      labels: {
-        staggerLines: 1,
-        step: 12
-      }
-    },
-    yAxis: {
-      title: false,
-      gridLineWidth: 0,
-      minRange: 6,
-      floor: 0,
-      labels: {
-        enabled: false
-      },
-      plotLines: [{ // light rain
-        color: '#FDFF00',
-        width: 2,
-        value: 0.3,
-        label: {
-          text: navigator.mozL10n.get("light-rain"),
-          style: {
-            color: '#000000'
-          }
-        }
-      }, { // medium rain
-        color: '#FF4E00',
-        width: 2,
-        value: 1.3,
-        label: {
-          text: navigator.mozL10n.get("medium-rain"),
-          style: {
-            color: '#000000'
-          }
-        }
-      }, { // heavy rain
-        color: '#B90000',
-        width: 2,
-        value: 3.25,
-        label: {
-          text: navigator.mozL10n.get("heavy-rain"),
-          style: {
-            color: '#000000'
-          }
-        }
-      }]
+    point: {
+      show: false
     },
     tooltip: {
-      crosshairs: [true, true],
-      followTouchMove: true,
-      shared: true,
-      pointFormat: '<b>{point.y:,.1f} mm</b><br/>'
-    },
-    plotOptions: {
-      area: {
-        pointStart: 0,
-        marker: {
-          enabled: false,
-          symbol: 'circle',
-          radius: 2,
-          states: {
-            hover: {
-              enabled: true
-            }
-          }
+      format: {
+        value: function (value, ratio, id) {
+          return d3.round(value,1) + ' mm/h';
         }
-      }
-    },
-    series: [{
-      name: description,
-      data: data,
-      color: '#B2F2FF'
-    }],
-    noData: {
-    style: {
-      fontWeight: 'bold',
-      fontSize: '15px',
-      color: '#333'
+      },
+      position: function (data, width, height, element) {
+        var gWidth = $('#graph').width();
+        return {top: 10, left: gWidth - width -10}
       }
     }
   });
 
-  chart.hideNoData();
+  var textDescription = d3.select('svg').append('text')
+    .attr('x', 10 )
+    .attr('y', 20)
+    .attr('class', 'locationTitle')
+    .text(description);
+
+  var textWeather = d3.select('svg').append('text')
+    .attr('x', 10 )
+    .attr('y', 40);
+
+  if (weather.weatherIcon) {
+    textWeather.append('svg:tspan').attr('class','wi weatherIcon').text(weather.weatherIcon);
+  }
+
+  if (weather.temp) {
+    textWeather.append('svg:tspan').attr('class','temp').text('\u00a0' + weather.temp + '\u00B0' + 'C' + '\u00a0\u00a0');
+  }
+
+  if (weather.windIcon) {
+    textWeather.append('svg:tspan').attr('class','wi windIcon').text(weather.windIcon).attr('y',42);
+  }
+
+  if (weather.windBft) {
+    textWeather.append('svg:tspan').attr('class','windBft').text('\u00a0' + weather.windBft + 'Bft').attr('y',40);
+  }
 
   if (data.every(function(element, index, array) {
     return Math.round(10*element[1]) == 0;
   })) {
-    chart.showNoData(navigator.mozL10n.get("no-rain"));
+    var textNoRain = d3.select('svg').append('text')
+    .attr('x', 10 )
+    .attr('y', 60)
+    .attr('class', 'noRain')
+    .text(navigator.mozL10n.get("no-rain"));
   }
 }
 
@@ -524,123 +493,99 @@ function windMsToBft(windMs) {
   }
 }
 
-function windDegTo15Deg(deg, correction) {
-  if (correction) { deg += correction; }
-  if (deg < 0) { deg += 360; }
-  if (deg >= 360) { deg -= 360; }
-  return Math.round(deg/15) * 15;
-}
-
 function tempKtoC(tempK) {
   return Math.round(tempK - 273.15);
 }
 
-function convertIcon(icon) {
+function convertIcon(icon, unicode) {
   switch (icon) {
     case '01d':
-      return 'wi-day-sunny';
+      return unicode ? '\uf00d' : 'wi-day-sunny';
     case '02d':
-      return 'wi-day-sunny-overcast';
+      return unicode ? '\uf00c' : 'wi-day-sunny-overcast';
     case '03d':
-      return 'wi-cloudy';
+      return unicode ? '\uf013' : 'wi-cloudy';
     case '04d':
-      return 'wi-cloudy';
+      return unicode ? '\uf013' : 'wi-cloudy';
     case '09d':
-      return 'wi-showers';
+      return unicode ? '\uf01a' : 'wi-showers';
     case '10d':
-      return 'wi-day-showers';
+      return unicode ? '\uf009' : 'wi-day-showers';
     case '11d':
-      return 'wi-storm-showers';
+      return unicode ? '\uf01d' : 'wi-storm-showers';
     case '13d':
-      return 'wi-snow';
+      return unicode ? '\uf01b' : 'wi-snow';
     case '50d':
-      return 'wi-fog';
+      return unicode ? '\uf014' : 'wi-fog';
     case '01n':
-      return 'wi-night-clear';
+      return unicode ? '\uf02e' : 'wi-night-clear';
     case '02n':
-      return 'wi-night-cloudy';
+      return unicode ? '\uf031' : 'wi-night-cloudy';
     case '03n':
-      return 'wi-cloudy';
+      return unicode ? '\uf013' : 'wi-cloudy';
     case '04n':
-      return 'wi-cloudy';
+      return unicode ? '\uf013' : 'wi-cloudy';
     case '09n':
-      return 'wi-showers';
+      return unicode ? '\uf01a' : 'wi-showers';
     case '10n':
-      return 'wi-night-showers';
+      return unicode ? '\uf037' : 'wi-night-showers';
     case '11n':
-      return 'wi-storm-showers';
+      return unicode ? '\uf01d' : 'wi-storm-showers';
     case '13n':
-      return 'wi-snow';
+      return unicode ? '\uf01b' : 'wi-snow';
     case '50n':
-      return 'wi-fog';
+      return unicode ? '\uf014' : 'wi-fog';
     }
 }
 
-function renderWeather(data) {
-  var darkness = false;
-  var temp = 0;
-  var windBft = 0;
-  var windDeg = 0;
+function windDegToIcon(degrees, border) {
+  var deg = degrees || 0;
+  if (deg < 0) { deg += 360; }
+  if (deg >= 360) { deg -= 360; }
+
+  // north
+  if (deg >= 337.5 && deg < 360 || deg >= 0 && deg < 22.5) { return '\uf044'; }
+  // north-east
+  if (deg >= 22.5 && deg < 67.5) { return '\uf043'; }
+  // east
+  if (deg >= 67.5 && deg < 112.5) { return '\uf048'; }
+  // south-east
+  if (deg >= 112.5 && deg < 137.5) { return '\uf087'; }
+  // south
+  if (deg >= 137.5 && deg < 202.5) { return '\uf058'; }
+  // south-west
+  if (deg >= 202.5 && deg < 247.5) { return '\uf057'; }
+  // west
+  if (deg >= 247.5 && deg < 292.5) { return '\uf04d'; }
+  // north-west
+  if (deg >= 292.5 && deg < 337.5) { return '\uf088'; }
+}
+
+function convertWeatherData(data) {
+  var result = {
+    darkness: false
+  };
 
   if (data.dt && data.sys && data.sys.sunrise && data.sys.sunset) {
     if (data.dt < data.sys.sunrise || data.dt > data.sys.sunset) {
-      darkness = true;
+      result.darkness = true;
     }
   }
 
   if (data.wind && data.wind.speed && data.wind.deg) {
-    var windBft = windMsToBft(data.wind.speed);
-    var windDeg = windDegTo15Deg(data.wind.deg, 135);
-
-    $('#windBft').html(windBft);
-    $('#windDeg').prop('class', 'fa fa-location-arrow _'+windDeg+'-deg');
+    result.windBft = windMsToBft(data.wind.speed);
+    result.windIcon = windDegToIcon(data.wind.deg);
   }
 
   if (data.main && data.main.temp) {
-    var temp = tempKtoC(data.main.temp);
-    $('#temp').html(temp);
+    result.temp = tempKtoC(data.main.temp);
   }
 
   if (data.weather && data.weather[0] && data.weather[0].icon) {
-    var wiIcon = convertIcon(data.weather[0].icon);
-    $('#weatherIcon').prop('class', 'wi ' + wiIcon);
-  }
-}
-
-function generateWeatherHTML(data) {
-  var darkness = false;
-  var temp = 0;
-  var windBft = 0;
-  var windClasses = '';
-  var iconClasses = '';
-
-  if (data.dt && data.sys && data.sys.sunrise && data.sys.sunset) {
-    if (data.dt < data.sys.sunrise || data.dt > data.sys.sunset) {
-      darkness = true;
-    }
+    result.weatherIcon = convertIcon(data.weather[0].icon, true);
   }
 
-  if (data.wind && data.wind.speed && data.wind.deg) {
-    var windBft = windMsToBft(data.wind.speed);
-    var windDeg = windDegTo15Deg(data.wind.deg, 135);
-    windClasses = 'fa fa-location-arrow _'+windDeg+'-deg';
-  }
-
-  if (data.main && data.main.temp) {
-    var temp = tempKtoC(data.main.temp);
-  }
-
-  if (data.weather && data.weather[0] && data.weather[0].icon) {
-    var wiIcon = convertIcon(data.weather[0].icon);
-    iconClasses = 'wi ' + wiIcon;
-  }
-
-  var html = '<span class="infoIcon"><i id="weatherIcon" class="' + iconClasses + '"></i></span> ' +
-             '<span class="infoText"><span id="temp">' + temp + '</span>&deg;C</span> &nbsp; ' +
-             '<span class="infoIcon"><i id="windDeg" class="' + windClasses + '"></i></span> ' +
-             '<span class="infoText"><span id="windBft">' + windBft + '</span> Bft</span>';
-
-  return html;
+  return result;
 }
 
 function showNotification(message) {
@@ -649,6 +594,7 @@ function showNotification(message) {
 }
 
 function run (loc){
+  $('html, body').animate({ scrollTop: 0 }, 'slow');
   toggleWaiter(true);
   var location = loc || getDefaultLoc();
 
@@ -660,12 +606,12 @@ function run (loc){
     }
 
     getCurrentWeather(location.lat, location.lon, function(err, weatherData) {
-      var weatherHTML = '';
+      var weather = {};
       if (!err) {
-        weatherHTML = generateWeatherHTML(weatherData);
+        weather = convertWeatherData(weatherData);
       }
 
-      draw(rainData, location.desc, weatherHTML);
+      draw(rainData, location.desc, weather);
       toggleWaiter(false);
     });
   });

@@ -35,23 +35,52 @@ footer { margin-top: -4rem; height:4rem;}
 
 #sidemenu ul li {
   display:block;
-  padding:1.5rem;
+  padding:0;
   float:left;
   width:100%;
+  padding:1em;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   border-bottom: 0.1rem solid #596068;
 }
 
-button.add-location {
-  width:5rem;
+span.add-location {
+  display:block;
+  float:right;
   margin-top:1rem;
+  font-size:2em;
+  color:#fff;
+  margin-left:1em;
 }
 
-button.show-loc, button.remove-loc, button.current-location {
-  width:auto;
+span.show-loc {
+  display:block;
+  float:left;
+  width:80%;
+  font-size:1.5em;
+}
+
+span.remove-loc {
+  font-family:"FontAwesome";
+  font-size:2em;
+  display:block;
+  float:right;
+  margin-left:1em;
+}
+
+span.current-location {
+  font-size:1.5em;
+}
+
+span.current-location i {
+  font-size:1.5em;
+  margin-right:0.5em;
 }
 
 input#new-location {
   height: 3.8rem;
+  width:80%;
   margin: 0;
   font-size:1.25rem;
   padding: 0px 1.5rem;
@@ -59,6 +88,66 @@ input#new-location {
   display: inline-block;
 }
 
-span.infoText {
-  
+text.titleName {
+  fill:red;
+}
+
+.locationTitle {
+  font-size:1.5em;
+  font-weight:bold;
+}
+
+.windBft {
+  font-size:1.5em;
+}
+
+.windIcon {
+  font-size:2em;
+}
+
+.weatherIcon {
+  font-size:1.5em;
+}
+
+.temp {
+  font-size:1.5em;
+}
+
+.noRain {
+  font-size:1.5em;
+}
+
+.c3-ygrid-line.line-light-rain line {
+    stroke: #FDFF00;
+	stroke-width:1.3;
+}
+
+.c3-ygrid-line.line-light-rain text {
+    fill: #000000;
+}
+
+.c3-ygrid-line.line-medium-rain line {
+    stroke: #ff4e00;
+	stroke-width:1.3;
+}
+
+.c3-ygrid-line.line-medium-rain text {
+    fill: #000000;
+}
+
+.c3-ygrid-line.line-heavy-rain line {
+    stroke: #B90000;
+	stroke-width:1.3;
+}
+
+.c3-ygrid-line.line-heavy-rain text {
+    fill: #000000;
+}
+
+.c3-tooltip .name {
+  display: none;
+}
+
+.c3 .c3-axis-x line, .c3 .c3-axis-x path {
+  stroke:#606060;
 }

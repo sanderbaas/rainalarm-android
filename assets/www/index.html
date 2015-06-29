@@ -9,13 +9,13 @@
     <link rel="apple-touch-icon" href="icon57.png">
     <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/weather-icons/css/weather-icons.min.css">
-    <link rel="stylesheet" href="css/weather-icons-custom.css">
     <link rel="stylesheet" type="text/css" href="css/base.css">
     <link rel="stylesheet" type="text/css" href="css/headers.css">
     <link rel="stylesheet" type="text/css" href="css/buttons.css">
     <link rel="stylesheet" type="text/css" href="css/toolbars.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
-    <title>Regenalarm</title>
+    <link rel="stylesheet" type="text/css" href="js/c3/c3.min.css">
+    <title data-l10n-id="app-heading"></title>
     <!-- Localization -->
     <link rel="resource" type="application/l10n" href="locales/locales.ini" />
     <script type="application/javascript" src="js/l10n.js"></script>
@@ -27,14 +27,14 @@
           <menu type="toolbar" class="left">
             <button class="show-menu" id="menu"><span class="icon icon-menu"></span></button>
           </menu>
-          <h1 data-l10n-id="app-heading">Regenalarm</h1>
+          <h1 data-l10n-id="app-heading"></h1>
         </header>
       </section>
       <div id="error-display"></div>
       <div id="sidemenu">
         <ul id="locs">
-          <li><h2 data-l10n-id="add-location-title">Add location</h2><input name="newLocation" id="new-location" type="text"> <button class="add-location" id="add-location">OK</button></li>
-          <li><button class="current-location" id="current-location" data-l10n-id="current-location-button">Current location</button></li>
+          <li><h2 data-l10n-id="add-location-title">Add location</h2><input name="newLocation" id="new-location" type="text"> <span class="add-location" id="add-location"><i class="fa fa-search"></i></span></li>
+          <li><span class="current-location" id="current-location" data-l10n-id="current-location-button"><i class="fa fa-location-arrow"></i> Current location</span></li>
         </ul>
       </div>
         <div id="graph">
@@ -50,7 +50,9 @@
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
     <script type="text/javascript" src="js/base.js"></script>
-    <script type="text/javascript" src="js/highcharts/highcharts.js"></script>
+    <!--<script type="text/javascript" src="js/highcharts/highcharts.js"></script>-->
+    <script src="js/d3/d3.min.js" charset="utf-8"></script>
+    <script src="js/c3/c3.min.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
   </body>
 </html>

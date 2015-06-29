@@ -1,10 +1,12 @@
-# Rain Alarm
+# RainTime
 
-Rain Alarm is an app for Android with which precipitation forecasts are visualized in a graph. For now only locations in The Netherlands are covered via open-data of Buienradar. Forecasts of the next two hours are displayed in five-minute intervals.
+RainTime is an app for Android with which precipitation forecasts are visualized in a graph. For now only locations in The Netherlands are covered via open-data of Buienradar. Forecasts of the next two hours are displayed in five-minute intervals.
 
 It is possible to search a certain location by address, through Nominatim and save it. You can save multiple locations and switch between them. You can also use your current location.
 
 This app has been generated from an HTML5-app with PhoneGap.
+
+I changed the name from Rain Alarm to RainTime, because it is no alarm and I am not planning to build this feature. The name RainTime references the x- and y-axis of the chart: Rain over Time.
 
 ### Privacy
 
@@ -17,21 +19,21 @@ I am also thinking about adding an option to 'blur' your location by a certain d
 Third feature I am thinking of is a way of using a (anonymizing) proxy for fetching forecasts from Buienradar, to prevent sharing your location along with your IP-address with them.
 
 ### Version
-2.2.2
+3.0.0
 
 ### Tech
 
-RainAlarm uses a number of open source projects to work properly:
+RainTime uses a number of open source projects to work properly:
 
 * [PhoneGap] - framework to create mobile apps using standardized web APIs for different
-* [HighCharts] - a charting library written in pure JavaScript
+* [C3] - D3-based reusable chart library
 * [Nominatim] - a tool from OpenStreetmap for reverse geocoding
 * [jQuery] - a fast, small, and feature-rich JavaScript library
 * [OpenStreetMap] - a collaborative project to create a free editable map of the world
 
 I compile the source code with Eclipse by using cordova-3.7.2.jar in a 'libs' directory in the root of this project.
 You can obtain this here: https://www.apache.org/dist/cordova/platforms/
-To build the .jar file, download a .tgz file, unpack it and then:
+To build the .jar file, download a .tgz file, unpack it and then inside its package/framework directory:
 ```
 android update project -p .
 ```
@@ -54,7 +56,7 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 
 
 [PhoneGap]:http://phonegap.com
-[HighCharts]:http://www.highcharts.com
+[C3]:http://c3js.org/
 [Nominatim]:http://wiki.openstreetmap.org/wiki/Nominatim
 [jQuery]:http://jquery.com
 [Firefox Marketplace]:https://marketplace.firefox.com/

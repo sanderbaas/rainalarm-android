@@ -1,7 +1,8 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.implode.regenalarm" version="2.2.2" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="nl.implode.regenalarm" version="3.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
-    <name>Regenalarm</name>
+    <hook src="hooks/android/fix_nl.js" type="after_prepare" />
+    <name>RainTime</name>
     <description>
         Precipitation forecast for the next two hours in five minute intervals. For every location in the Netherlands.
     </description>

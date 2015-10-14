@@ -311,7 +311,9 @@ function getLiveData (lat, lon, cb) {
       var lines = xhr.response.trim().split("\n");
       lines.forEach(function(line) {
         var parts = line.trim().split('|');
-        var mm = Math.pow(10, (parseInt(parts[0])-109)/32);
+        var perc = '000';
+        if (parts[0] !== '') { perc = parts[0]; }
+        var mm = Math.pow(10, (parseInt(perc)-109)/32);
         labels.push(parts[1]);
         sets.push([parts[1],mm])
       });

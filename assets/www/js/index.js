@@ -607,15 +607,8 @@ function run (loc){
       return;
     }
 
-    getCurrentWeather(location.lat, location.lon, function(err, weatherData) {
-      var weather = {};
-      if (!err) {
-        weather = convertWeatherData(weatherData);
-      }
-
-      draw(rainData, location.desc, weather);
-      toggleWaiter(false);
-    });
+    draw(rainData, location.desc, {});
+    toggleWaiter(false);
   });
 }
 

@@ -15,4 +15,4 @@ out
 CordovaLib
 .gradle
 release-signing.properties
-cordova
+/cordova

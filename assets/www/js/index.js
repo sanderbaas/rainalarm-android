@@ -91,12 +91,12 @@ function initialize () {
             run(geoLocation);
           });
         },
-        function () {
+        function (err) {
           window.clearTimeout(timeoutGeo);
           toggleWaiter(false);
           alerter(navigator.mozL10n.get("error-location-message"));
         }, {
-          maximumAge: 3000, timeout: 5000, enableHighAccuracy: false
+          enableHighAccuracy: true
         });
       };
     }
@@ -277,7 +277,7 @@ function getAddress (lat, lon, cb) {
 }
 
 function getCurrentWeather (lat, lon, cb){
-  var url = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon;
+  var url = 'http://api.openweathermap.org/data/2.5/weather?lat='+lat+'&lon='+lon+'&appid=fbc3d19917801786e46dbacd55d2ee9c';
   var xhr = new XMLHttpRequest({mozSystem: true});
   xhr.timeout = 3000;
   xhr.open('GET', url, true);
@@ -301,7 +301,7 @@ function getCurrentWeather (lat, lon, cb){
 
 function getLiveData (lat, lon, cb) {
   var url = 'http://gps.buienradar.nl/getrr.php?lat='+lat+'&lon='+lon;
-  var xhr = new XMLHttpRequest({mozSystem: true});
+  var xhr = new XMLHttpRequest();
   xhr.timeout = 3000;
   xhr.open('GET', url, true);
   xhr.onreadystatechange = function () {

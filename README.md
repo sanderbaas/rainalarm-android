@@ -19,7 +19,7 @@ I am also thinking about adding an option to 'blur' your location by a certain d
 Third feature I am thinking of is a way of using a (anonymizing) proxy for fetching forecasts from Buienradar, to prevent sharing your location along with your IP-address with them.
 
 ### Version
-3.0.0
+4.0.0
 
 ### Tech
 
@@ -31,24 +31,12 @@ RainTime uses a number of open source projects to work properly:
 * [jQuery] - a fast, small, and feature-rich JavaScript library
 * [OpenStreetMap] - a collaborative project to create a free editable map of the world
 
-I compile the source code with Eclipse by using cordova-3.7.2.jar in a 'libs' directory in the root of this project.
-You can obtain this here: https://www.apache.org/dist/cordova/platforms/
-To build the .jar file, download a .tgz file, unpack it and then inside its package/framework directory:
-```
-android update project -p .
-```
-and
-```
-ant
-```
-After this, right click the jar file in Eclipse and add it to the build path.
-
 License
 ----
 
 ISC
 
-Copyright (c) 2015 Sander Baas
+Copyright (c) 2016 Sander Baas
 
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
@@ -59,6 +47,5 @@ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH RE
 [C3]:http://c3js.org/
 [Nominatim]:http://wiki.openstreetmap.org/wiki/Nominatim
 [jQuery]:http://jquery.com
-[Firefox Marketplace]:https://marketplace.firefox.com/
 [f-droid]:https://f-droid.org/
 [OpenStreetMap]:https://www.openstreetmap.org/

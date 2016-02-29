@@ -1,7 +1,15 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="nl.implode.regenalarm" version="3.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+<widget id="nl.implode.regenalarm" version="4.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
     <preference name="loglevel" value="DEBUG" />
+    <feature name="Whitelist">
+        <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
+    </feature>
     <hook src="hooks/android/fix_nl.js" type="after_prepare" />
+    <hook src="hooks/android/copy_assets.js" type="after_prepare" />
     <name>RainTime</name>
     <description>
         Precipitation forecast for the next two hours in five minute intervals. For every location in the Netherlands.

@@ -283,9 +283,13 @@ function getCurrentWeather (lat, lon, cb){
   xhr.open('GET', url, true);
   xhr.onreadystatechange = function () {
     if (xhr.status === 200 && xhr.readyState === 4) {
-      var data = JSON.parse(xhr.response);
+      var data = JSON.parse(xhr.responseText);
       cb(null, data);
       return;
+    }
+
+    if (xhr.status !== 200 && xhr.readyState === 4) {
+      cb(null, {});
     }
   };
 
@@ -300,7 +304,7 @@ function getCurrentWeather (lat, lon, cb){
 }
 
 function getLiveData (lat, lon, cb) {
-  var url = 'http://gps.buienradar.nl/getrr.php?lat='+lat+'&lon='+lon;
+  var url = 'https://gratisweerdata.buienradar.nl/data/raintext?lat='+lat+'&lon='+lon;
   var xhr = new XMLHttpRequest();
   xhr.timeout = 3000;
   xhr.open('GET', url, true);
@@ -607,8 +611,14 @@ function run (loc){
       return;
     }
 
-    draw(rainData, location.desc, {});
-    toggleWaiter(false);
+    getCurrentWeather(location.lat, location.lon, function(err, weatherData) {
+      var weather = {};
+      if (!err) {
+        weather = convertWeatherData(weatherData);
+      }
+      draw(rainData, location.desc, weather);
+      toggleWaiter(false);
+    });
   });
 }
 

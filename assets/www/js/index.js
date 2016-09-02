@@ -435,7 +435,7 @@ function draw(data, description, weather) {
   }
 
   if (weather.temp) {
-    textWeather.append('svg:tspan').attr('class','temp').text('\u00a0' + weather.temp + '\u00B0' + 'C' + '\u00a0\u00a0');
+    textWeather.append('svg:tspan').attr('class','temp').text('\u00a0' + weather.temp + '\u00a0' + '\u2103' + '\u00a0\u00a0');
   }
 
   if (weather.windIcon) {
@@ -443,7 +443,7 @@ function draw(data, description, weather) {
   }
 
   if (weather.windBft) {
-    textWeather.append('svg:tspan').attr('class','windBft').text('\u00a0' + weather.windBft + 'Bft').attr('y',40);
+    textWeather.append('svg:tspan').attr('class','windBft').text('\u00a0' + weather.windBft + '\u00a0' + 'Bft').attr('y',40);
   }
 
   if (data.every(function(element, index, array) {

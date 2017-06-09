@@ -17,3 +17,4 @@ CordovaLib
 .gradle
 release-signing.properties
 /cordova
+assets/www/config

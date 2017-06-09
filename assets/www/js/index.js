@@ -1,4 +1,5 @@
 var locations = [];
+var currentLocation = false;
 var geoLocation;
 var autoRefreshInterval = 60000;
 var autoRefreshId;
@@ -8,6 +9,7 @@ function initialize () {
   navigator.mozL10n.ready(function() {
     // fetch localStorage
     locations = JSON.parse(window.localStorage.getItem('locations')) || [];
+    currentLocation = JSON.parse(window.localStorage.getItem('currentLocation')) || false;
 
     $(document).on('click','span.remove-loc', function(){
       removeLoc($(this).data('id'));
@@ -30,6 +32,25 @@ function initialize () {
         run();
       };
     };
+
+    var toggleMap = document.querySelector("#toggleMap");
+    if (toggleMap) {
+      toggleMap.onclick = function () {
+        var divGraph = document.getElementById("graph");
+        var divMap = document.getElementById("map");
+        console.log(divGraph.style,divMap.style);
+        if (divGraph && divMap) {
+          divGraph.style.display = divGraph.style.display == 'none' ? 'block' : 'none';
+          if (divMap.style.display == 'block') {
+            divMap.style.display = 'none';
+            document.getElementById('toggleMapIcon').className = document.getElementById('toggleMapIcon').className.replace('fa-area-chart','fa-map');
+          }else{
+            divMap.style.display = 'block';
+            document.getElementById('toggleMapIcon').className = document.getElementById('toggleMapIcon').className.replace('fa-map','fa-area-chart');
+          }
+        }
+      }
+    }
 
     var btnAddLocation = document.querySelector("#add-location");
     var txtNewLocation = document.querySelector("#new-location");
@@ -61,6 +82,19 @@ function initialize () {
       };
     }
 
+    var btnSaveCurrentLocation = document.querySelector("#save-current-location");
+    if (btnSaveCurrentLocation) {
+      btnSaveCurrentLocation.onclick = function () {
+        if (currentLocation) {
+          addLocation(currentLocation);
+          addLocElement(currentLocation);
+        }
+        if (!currentLocation) {
+          alerter(navigator.mozL10n.get("error-no-current-location-message"));
+        }
+      }
+    }
+
     var btnCurrentLocation = document.querySelector("#current-location");
     if (btnCurrentLocation) {
       btnCurrentLocation.onclick = function () {
@@ -88,6 +122,7 @@ function initialize () {
               desc: description,
               default: true
             };
+            saveCurrentLocation(geoLocation);
             run(geoLocation);
           });
         },
@@ -119,13 +154,13 @@ function initialize () {
 }
 
 function toggleWaiter(visible) {
-  if (visible && !$('#reload').hasClass('spinning')) {
-    $('#reload').addClass('spinning');
+  if (visible && !$('#updateIcon').hasClass('fa-spin')) {
+    $('#updateIcon').addClass('fa-spin');
     return;
   }
 
-  if ($('#reload').hasClass('spinning')) {
-    $('#reload').removeClass('spinning');
+  if ($('#updateIcon').hasClass('fa-spin')) {
+    $('#updateIcon').removeClass('fa-spin');
     return;
   }
 }
@@ -171,7 +206,15 @@ function setDefaultLoc(id) {
   window.localStorage.setItem('locations', JSON.stringify(locations));
 }
 
+function saveCurrentLocation(currLoc) {
+  currentLocation = currLoc;
+  window.localStorage.setItem('currentLocation', JSON.stringify(currLoc));
+}
+
 function getStandardLoc() {
+  if (currentLocation) {
+    return currentLocation;
+  }
   return {
     lat: 52.1100,
     lon: 5.1806,

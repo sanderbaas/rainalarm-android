@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="content-security-policy" content="default-src 'self' 'unsafe-inline'; connect-src 'self' https://*.buienradar.nl http://*.buienradar.nl http://api.openweathermap.org https://nominatim.openstreetmap.org">
+    <meta http-equiv="content-security-policy" content="default-src 'self' https://*.buienradar.nl 'unsafe-inline'; connect-src 'self' https://*.buienradar.nl http://*.buienradar.nl http://api.openweathermap.org https://nominatim.openstreetmap.org">
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
@@ -36,14 +36,19 @@
         <ul id="locs">
           <li><h2 data-l10n-id="add-location-title">Add location</h2><input name="newLocation" id="new-location" type="text"> <span class="add-location" id="add-location"><i class="fa fa-search"></i></span></li>
           <li><span class="current-location" id="current-location" data-l10n-id="current-location-button"><i class="fa fa-location-arrow"></i> Current location</span></li>
+          <li><span class="save-current-location" id="save-current-location" data-l10n-id="save-current-location-button"><i class="fa fa-bookmark"></i> Save current location</span></li>
         </ul>
       </div>
         <div id="graph">
         </div>
+        <div id="map">
+          <iframe src="https://gadgets.buienradar.nl/gadget/zoommap/?lat=51.81&lng=4.67361&overname=2&zoom=6&naam=dordrecht&size=2b&voor=1" scrolling=no width="100%" height="100%" frameborder=no></iframe>
+        </div>
       <footer>
         <div role="toolbar">
           <ul>
-            <li><button id="reload" class="update"></button></li>
+            <li><div id="toggleMap" class="btn toggleMap"><i id="toggleMapIcon" class="fa fa-map fa-2x" aria-hidden="true"></i></div></li>
+            <li><div id="reload" class="btn update"><i id="updateIcon" class="fa fa-refresh fa-2x" aria-hidden="true"></i></div></li>
           </ul>
         </div>
       </footer>

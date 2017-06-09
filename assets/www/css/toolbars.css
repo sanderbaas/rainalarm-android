@@ -3,7 +3,7 @@
 * ---------------------------------- */
 
 [role="toolbar"] {
-  height: 4rem;
+  height:40px;
   width: 100%;
   position: fixed;
   bottom: 0;
@@ -27,14 +27,13 @@
   float: left;
 }
 
-[role="toolbar"] button {
-  width: 5.5rem;
-  height: 4rem;
+[role="toolbar"] .btn {
+  height:20px;
+  margin-top:10px;
+  margin-right:20px;
   border: none;
-  font-size: 0;
+  color:white;
   background-color: transparent;
-  background-position: center;
-  background-repeat: no-repeat;
   padding: 0;
   border-radius: 0;
 }

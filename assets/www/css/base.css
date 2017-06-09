@@ -135,17 +135,3 @@ footer {
     height: 5rem;
     bottom: 0;
 }
-
-[role="toolbar"] li button.update {
-    background-image: url("../images/reload.png");
-}
-
-[role="toolbar"] li button.update:active {
-    background-color: transparent;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-[role="toolbar"] li button.update.spinning {
-    background-image: url("../images/ajax-loader.gif");
-}

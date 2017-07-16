@@ -347,7 +347,7 @@ function getCurrentWeather (lat, lon, cb){
 }
 
 function getLiveData (lat, lon, cb) {
-  var url = 'http://gps.buienradar.nl/getrr.php?lat='+lat+'&lon='+lon;
+  var url = 'http://gadgets.buienradar.nl/data/raintext?lat='+lat+'&lon='+lon;
   var xhr = new XMLHttpRequest();
   xhr.timeout = 3000;
   xhr.open('GET', url, true);

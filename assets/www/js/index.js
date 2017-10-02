@@ -394,6 +394,12 @@ function getTestData(lat, lon, cb) {
 function draw(data, description, weather) {
   $('#error-display').hide();
 
+  var hasData = data.length > 0;
+
+  var noRain = (data.every(function(element, index, array) {
+    return Math.round(10*element[1]) == 0;
+  }));
+
   var x = [];
   var precipitation = [];
   data.forEach(function(pair){
@@ -489,14 +495,21 @@ function draw(data, description, weather) {
     textWeather.append('svg:tspan').attr('class','windBft').text('\u00a0' + weather.windBft + '\u00a0' + 'Bft').attr('y',40);
   }
 
-  if (data.every(function(element, index, array) {
-    return Math.round(10*element[1]) == 0;
-  })) {
+  var indicatorText = '';
+  if (haveData && noRain) {
+	indicatorText = navigator.mozL10n.get("no-rain");
+  }
+
+  if (!hasData) {
+	indicatorText = navigator.mozL10n.get("no-data")
+  }
+
+  if (noRain) {
     var textNoRain = d3.select('svg').append('text')
     .attr('x', 10 )
     .attr('y', 60)
     .attr('class', 'noRain')
-    .text(navigator.mozL10n.get("no-rain"));
+    .text(indicatorText);
   }
 }
 
